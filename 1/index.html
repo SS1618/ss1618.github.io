@@ -15,8 +15,25 @@
             <p>The Prokudin-Gorskii Collection consists of photographs taken by Russian chemist and photographer, Sergei Mikhailovich Prokudin-Gorskii.
             For each scene, he captured three exposures with red, green, and blue filters. These photos were purchased by the Library of Congress in 1948.</p>
         <h2>Goal</h2>
-            <p>The goal of this project is to write a program that can ingest RGB glass plate images and produce a colorized rendition of the scene.</p>
-        <h2>Registration</h2>
-            <p>In order to construct a color version of the scenes, the three RGB glass plate images needed to be overlayed. Unfortuantely, they are not aligned with each other, so overlaying them would just create a strange image with discordant colors.</p>
+            <p>The goal of this project is to write a program that can ingest RGB glass plate images of a scene and produce a colorized rendition.</p>
+        <h2>Registering Small Images</h2>
+            <p> To construct a color version of the scenes, the three RGB glass plate images need to be overlayed. Unfortunately, they are not aligned with each other, so overlaying them creates a strange image with discordant colors.
+            To overcome this problem, I had to register the images. Given an input image, I, and a reference image, R, here is an outline of my registration methodology:</p>
+            <ul>
+                <li>Roll image I along both axes by some amount dx and dy in the range [-15, 15] to produce image I'</li>
+                <li>Compute the structural similarity index measure between I' and R: SSIM(I', R)</li>
+                <li>Repeat the above two steps for all possible values of dx and dy</li>
+                <li>Return the image I* such that SSIM(I*, R) = min{SSIM(I', R)}</li>
+            </ul>
+            <p> The above procedure is used to register the red and green images to the blue image. The registered images are then overlayed to produce a color image.
+                This procedure works for smaller images but takes too long when the input image is large.</p>
+        <h2>Coarse-to-Fine Image Registration</h2>
+            <p>To handle larger images, I implemented a coarse-to-fine registration algorithm. This works by constructing an image pyramid for both the input and reference image, where the base of the pyramid is the original image and each subsequent level rescales the image by a factor of 1/2.</p>
+            <p>The registration methodology outlined in the previous section is then applied to the top of the pyramid (the lowest resolution) but with a shift window of [-16, 16]. 
+               This registration transformation is then applied to the next level of the pyramid after which this level is registered with a smaller shift window of [-8, 8].
+               This procedure continues for each level, reducing the shift window by 1/2 each time, until we reach the bottom of the pyramid. This algorithm speeds up the registration of larger images because the shift window size decreases as the image resolution increases. This means we don't need to iterate over the full image size as many times. Rather, we do finer and finer searches over the image as it gets bigger.</p>
+        <h2>Structure Similarity Index Measure</h2>
+            <p>I decided to use this measure to validate registrations since it attempts to take into account luminance, contrast, and structural similarity and is supposedly more aligned with human perception of image similarity.
+            I ended up implementing my own SSIM function using the original paper and scikit-image's implementation as references. I figured out how to compute the measure using the paper and used scikit-image's default values for constanst such as window size, C1, and C2.</p>
 </body>
 </html>
