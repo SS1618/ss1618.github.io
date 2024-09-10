@@ -23,7 +23,7 @@
                 <li>Roll image I along both axes by some amount dx and dy in the range [-15, 15] to produce image I'</li>
                 <li>Compute the structural similarity index measure between I' and R: SSIM(I', R)</li>
                 <li>Repeat the above two steps for all possible values of dx and dy</li>
-                <li>Return the image I* such that SSIM(I*, R) = min{SSIM(I', R)}</li>
+                <li>Return the image I* such that SSIM(I*, R) = max{SSIM(I', R)}</li>
             </ul>
             <p> The above procedure is used to register the red and green images to the blue image. The registered images are then overlayed to produce a color image.
                 This procedure works for smaller images but takes too long when the input image is large.</p>
@@ -34,6 +34,10 @@
                This procedure continues for each level, reducing the shift window by 1/2 each time, until we reach the bottom of the pyramid. This algorithm speeds up the registration of larger images because the shift window size decreases as the image resolution increases. This means we don't need to iterate over the full image size as many times. Rather, we do finer and finer searches over the image as it gets bigger.</p>
         <h2>Structure Similarity Index Measure</h2>
             <p>I decided to use this measure to validate registrations since it attempts to take into account luminance, contrast, and structural similarity and is supposedly more aligned with human perception of image similarity.
-            I ended up implementing my own SSIM function using the original paper and scikit-image's implementation as references. I figured out how to compute the measure using the paper and used scikit-image's default values for constanst such as window size, C1, and C2.</p>
+            I ended up implementing my own SSIM function using the original paper and scikit-image's implementation as references. I figured out how to compute the measure using the paper and used scikit-image's default values for the window size, C1, and C2.
+            My implementation of SSIM computed the formula below within 7x7 windows over the input image. Then I averaged these values across all the windows to produce a final measure.</p>
+        <h2>Border Cropping</h2>
+            <p>Since the borders of the images caused some strange behavior during registration, I cropped 10% of the image around the edges</p>
+            
 </body>
 </html>
