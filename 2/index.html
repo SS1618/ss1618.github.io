@@ -32,11 +32,11 @@
                 Though this method successfully identifies edges in the image, there is a lot of noise in the edge image. To resolve this, we can apply a gaussian filter to smooth over the noise in the original image. This can be done with one convolution for each direction by combining the gaussian filter with the finite difference operators. Doing it in one convolution versus two has the same result. Doing so creates an edge image that is less noisy. Below is a visualization of the gaussian convolved with the two difference operators, which is the kernel we apply to the cameraman image. Also below is the resulting edge image.
             </p>
             <figure>
-            <img src="media/cameraman_DOG_x.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+            <img src="media/cameraman_DOG_x.png" style="display:block;margin: auto;">
             <figcaption style="text-align:center;padding:0 15px"">Derivative of gaussian wrt x</figcaption>
             </figure>
             <figure>
-            <img src="media/cameraman_DOG_y.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+            <img src="media/cameraman_DOG_y.png" style="display:block;margin: auto;">
             <figcaption style="text-align:center;padding:0 15px"">Derivative of gaussian wrt y</figcaption>
             </figure>
             <figure>
