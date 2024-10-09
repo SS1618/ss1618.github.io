@@ -22,7 +22,7 @@
 </head>
 <body>
     <h1>Face Morphing</h1>
-        <h2>By: Saurav Sures</h2>
+        <h2>By: Saurav Suresh</h2>
         <h2>Overview</h2>
           <p>In this project, the goal is to morph faces to match a certain geometry and coloring. This allows us to smoothly morph faces to other faces and merge two faces together.
           </p>
@@ -46,13 +46,11 @@
         <h2>Part 2: Computing the "Mid-way Face"</h2>
           <p>Since both images above have a bijective relationship between their landmark points and as well as their triangles, we can produce a morph of the two faces. Specifically, we can generate a mid-way face that merges the two faces together. We do this by first computing the midpoints of all the corresponding points in the two faces. We then generate a Delaunay triangulation for these points and apply this triangulation to the two faces and this midpoint set. Next, we determine the affine transforms from each triangle in the midpoint structure to the corresponding triangles in the two face images. Then we go through all the points in each triangle in the midpoint set and use the associated transform to figure out the pixel value of the associated point in the face images. We use this to figure out the pixel values in the midway image. After interpolation, this will warp both face images to the midway geometry. Then we can average the two warped faces to get a midway face. The result is shown below:
           </p>
-            <figure>
                 <div class="row">
                     <div class="column"><img src="media/small_george.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
                     <div class="column"><img src="media/midway.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
                     <div class="column"><img src="media/small_william.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
                 </div>
-            </figure>
         <h2>Part 3: The Morph Sequence</h2>
           <p>In the previous section we morphed the two faces to a midway point, but we can use a similar procedure to morph the faces to any point in between them. Instead of finding the midpoint between corresponding landmark points, we can find a point 'warp_frac' of the way from one face and 1-warp_frac of the way from the second face. And if we can produce all the morphs for warp_frac ranging from 0 to 1, we can generate a smooth transformation from one face to another.
           </p>
