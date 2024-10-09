@@ -8,7 +8,15 @@
             margin: 20px;
         }
         .column {
-            float:left;
+          float: left;
+          width: 33.33%;
+          padding: 5px;
+        }
+
+        .row::after {
+          content: "";
+          clear: both;
+          display: table;
         }
     </style>
 </head>
@@ -25,6 +33,13 @@
                 <div class="row">
                     <div class="column"><img src="media/george.jpg" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
                     <div class="column"><img src="media/george_mesh_p1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
+                </div>
+                <figcaption style="text-align:center;">George Clooney by Martin Schoeller</figcaption>
+            </figure>
+            <figure>
+                <div class="row">
+                    <div class="column"><img src="media/william.jpg" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
+                    <div class="column"><img src="media/william_mesh_p1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
                 </div>
                 <figcaption style="text-align:center;">George Clooney by Martin Schoeller</figcaption>
             </figure>
