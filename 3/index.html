@@ -32,16 +32,16 @@
           <figure>
                 <div class="row">
                     <div class="column"><img src="media/george.jpg" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
-                    <div class="column"><img src="media/george_mesh_p1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
+                    <div class="column"><img src="media/george_mesh_p1.png" style="display:block;max-width: 200%;max-height: 200vh;margin: auto;"></div>
                 </div>
                 <figcaption style="text-align:center;">George Clooney by Martin Schoeller</figcaption>
             </figure>
             <figure>
                 <div class="row">
-                    <div class="column"><img src="media/william.jpg" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
-                    <div class="column"><img src="media/william_mesh_p1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
+                    <div class="column"><img src="media/William.jpg" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;"></div>
+                    <div class="column"><img src="media/william_mesh_p1.png" style="display:block;max-width: 200%;max-height: 200vh;margin: auto;"></div>
                 </div>
-                <figcaption style="text-align:center;">George Clooney by Martin Schoeller</figcaption>
+                <figcaption style="text-align:center;">Willaim Dafoe by Martin Schoeller</figcaption>
             </figure>
         <h2>Part 2: Computing the "Mid-way Face"</h2>
           <p>Since both images above have a bijective relationship between their landmark points and as well as their triangles, we can produce a morph of the two faces. Specifically, we can generate a mid-way face that merges the two faces together. We do this by first computing the midpoints of all the corresponding points in the two faces. We then generate a Delaunay triangulation for these points and apply this triangulation to the two faces and this midpoint set. Next, we determine the affine transforms from each triangle in the midpoint structure to the corresponding triangles in the two face images. Then we go through all the points in each triangle in the midpoint set and use the associated transform to figure out the pixel value of the associated point in the face images. We use this to figure out the pixel values in the midway image. After interpolation, this will warp both face images to the midway geometry. Then we can average the two warped faces to get a midway face. The result is shown below:
