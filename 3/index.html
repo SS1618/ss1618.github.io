@@ -62,17 +62,38 @@
         </h2>
           <p>We can apply the warping procedure from before to generate an average geometry for a collection of faces and warp faces to this average geometry. I did this for a subset of the IMM Face Database. Here are the results of warping faces from the database to the average geometry (as well as my face warped to the average geometry).
 </p>
+            <figure>
+                    <img src="media/ppl1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                    <img src="media/ppl2.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                    <img src="media/ppl3.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                    <img src="media/me_warp.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                </figure>
 
           <p>I also took all these warped results for each face in the databased and averaged them to get an average face.
           </p>
+            <figure>
+                    <img src="media/avg.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                </figure>
 
           <p>Here is the average warped to my face.
           </p>
+            <figure>
+                    <img src="media/avg_warp.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                </figure>
         <h2>Part 5: Caricature</h2>
-          <p>We can extrapolate from the mean geometry to generate carcicatures. So given the set of landmarks in the mean geometry, m, and the set of landmarks in a single face, q, we can generate a caricature by warping the single face to the geometry of the q + k(m - q). Below are the results for when k = -0.75 and 1.75.
+          <p>We can extrapolate from the mean geometry to generate carcicatures. So given the set of landmarks in the mean geometry, m, and the set of landmarks in a single face, q, we can generate a caricature by warping the single face to the geometry of the q + k(m - q). Below are the results for when k = 1.75.
           </p>
+            <figure>
+                    <img src="media/carc.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                </figure>
         <h2>Part 5: Auto Morph</h2>
           <p>Having to manually select facial landmarks can be tedious and subject to human error. Automatic facial landmark detection remedies this issue and makes morphing easier to perform. I implemented this by using the 'dlib' library to automatically identify 68 facial landmarks in a given face. I added four extra points to these in order to account for the edges of an image. This was then subject to the same procedure detailed above to morph two images. Here is an example of the automatically labelled landmarks and the resulting morph.
           </p>
+            <figure>
+                    <img src="media/auto_george.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                </figure>
+            <figure>
+                    <img src="media/george_to_william_auto.gif" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+                </figure>
 </body>
 </html>
