@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .column {
+          float: left;
+          width: 33.33%;
+          padding: 5px;
+        }
 
+        .row::after {
+          content: "";
+          clear: both;
+          display: table;
+        }
+    </style>
+</head>
+<body>
+    <h1>Autostitching Photo Mosaics</h1>
+        <h2>By: Saurav Suresh</h2>
+        <h2>Part A</h2>
+        <h3>Overview</h3>
+          <p>In this project, I will be stitching images together to create panoramas. This process involves defining corresponding points in the images and then computing a homography, which will be used for registration. Below is a more detailed outline of the project:
+        <ol>
+          <li>Collect pictures of a scene to stitch together.</li>
+          <li>Define correspondence points between the images.</li>
+          <li>Compute a homography using the correspondence points and use it to warp images.</li>
+          <li>Use the above procedure to perform image rectification</li>
+          <li>Use the procedure above to warp images to common reference and stitch them together</li>
+        </ol>
+</p>
+        <h3>Set Up</h3>
+          <p>The setup for this project involved collecting images of scenes to stitch together as well as images to perform image rectification on. Additionally, for the panorama images, I had to define correspondences between the photos. Below are the images I used and the correspondences I selected using this tool: 'https://cal-cs180.github.io/fa23/hw/proj3/tool.html'.
+          </p>
+          <img src="media/disp1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+          <img src="media/disp2.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+          <img src="media/disp3.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">  
+        <h3>Homography</h3>
+          <p>For this project, we will be using homographies to perform registration. A homography, H, is a 3x3 matrix with 8 degrees of freedom (H_{3,3} = 1) such that q_i = Hp_i for all i correspondences (p_i, q_i). If we have four correspondence points, we have a well-determined system that can be solved for H. If we have more points, we have an overdetermined system, which we may have no solution. So we can apply least squares to get approximate a homography that solves the system.</p>
+            <img src="media/equation1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+            <p>Determining a suitable h for the above constraints for all i gives us a homography H which can be used to register images.
+            </p>
+        <h3>Warping/Rectification</h3>
+          <p>Once a homography is found, images can be warped to match the geometry of the reference correspondence points. We can see this in action with image rectification. Consider the two images below of a room with tiled floors. We can use the tiling to generate a homography that will straighten out the tiles and thus transform the image into a top down view of the floor.</p>
+            <img src="media/disp4.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+            <img src="media/disp5.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+        <h3>Panoramas</h3>
+          <p>We can apply a similar procedure to stitch images together and create a panorama. Given two images, A and B, we can register A to B and then stitch A_to_B with B to generate a panorama of the two. Here are some results:</p>
+            <img src="media/disp6.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/disp7.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/disp8.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+          <p>The stitching of the registered images is non-trivial. There were two challenges when it came to stitching, the first being positioning the two images together in the same frame and the second being blending the two together. To position the two registered images, I figured out the position of the warped image in the warped space (the same space as the reference image), then shifted everything so that the warped image was in the +,+ quadrant. Then I was able to add the reference image to this space, which correctly positioned the two images relative to each other. Next, I used Laplacian pyramids to blend the two images together. I used pyramids over stacks to improve runtime.
+          </p>
+</body>
+</html>
