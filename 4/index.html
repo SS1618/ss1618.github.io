@@ -56,5 +56,35 @@
   <img src="media/disp8.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
           <p>The stitching of the registered images is non-trivial. There were two challenges when it came to stitching, the first being positioning the two images together in the same frame and the second being blending the two together. To position the two registered images, I figured out the position of the warped image in the warped space (the same space as the reference image), then shifted everything so that the warped image was in the +,+ quadrant. Then I was able to add the reference image to this space, which correctly positioned the two images relative to each other. Next, I used Laplacian pyramids to blend the two images together. I used pyramids over stacks to improve runtime.
           </p>
+    <h2>Part B</h2>
+    <h3>Overview</h3>
+    <p>In the second part of this project, I will be automatically defining correspondence points between two input images and then generating mosaics with the same procedure as part A.</p>
+    <h3>Harris Corners</h3>
+    <p>Harris corners allow us to detect corners in an image automatically. The key idea behind Harris corners is that given a patch in an image that contains a corner, a shift in any direction would produce a significant change in the patch. If the patch
+    contained an edge or nothing instead of a corner, certain shifts would be nearly identical to the original patch. So a Harris corner is detected by determining points at which such shifts induce significant changes in all directions. This is quantified via a response metric, and only points with relatively large responses are deemed Harris corners.
+    Below is an example of an image overlayed with its Harris corners. Immediately, it is apparent that we have too many points that are densely packed together. We need some way to keep only those points that have large responses while also making sure we have a nice distribution over the image. This is where adaptive non-maximal suppression becomes useful. </p>
+                <img src="media/disp9.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+    <h3>Adaptive Non-Maximal Supression</h3>
+        <p>ANMS works by figuring out some radius, r, and removing any points that do not have the greatest response within a radius r of itself. The larger this radius, the less points remain. So we can control the number of points
+        by increasing the radius until we reach our desired number of points. In practice, this algorithm leverages some clever observations to improve efficiency. The first observation is
+        that if we decrease the radius, this will only add points to our set, or in other words, no additional points will be suppressed. Therefore, if we start with a large radius and keep decreasing, we just have to check which points are no longer suppressed and add those points to our set.
+        The second observation is that there is a minimum suppression radius for each point. In other words, if we choose a radius any bigger than this, then this point will be suppressed. Using these two observations we can avoid an exhaustive search. Rather, we simply determine the minimum suppression radius
+        for each point, sort the points by their minimum suppression radii in descending order, and then we can choose the top k points as our non-suppressed points. Below are the resulting points.</p>
+                <img src="media/disp10.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+    <h3>Automatic Correspondence</h3>
+        <p>The next part of this project is identifying corresponding points. This is accomplished through matching feature descriptors. Essentially what happens is for both images, I extract an 8x8 patch about each corner point and then use the nearest neighbor algorithm to find the best buddies between the two images. Then for each of these pairs, I make sure the ratio of the distances from the nearest neighbor to the second nearest neighbor is below some threshold (0.65). This is a technique known as Lowe Thresholding which helps
+        get rid of poor matches. See below for the results of the best buddy matching and Lowe thresholding.</p>
+                        <img src="media/disp11.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+    <h4>RANSAC</h4>
+        <p>Unfortunately, the correspondences from the previous section aren't perfect. Outlier matches will screw up our homography calculation later on, so we need to remove these matches.
+        We can use the RANSAC algorithm to accomplish this. RANSAC randomly samples a set of correspondences and constructs a homography from these points. It then checks how many points out of all our points obey this
+        homography (i.e. the transformed point is within a certain distance of the actual point). The algorithm then deems these points as outliers, and the rest as inliers. After multiple iterations, the algorithm chooses whichever iteration had the most inliers and uses these inliers to compute a homography.
+        In this way, we remove outliers and compute a homography from just the inliers. Below are the inlier points.</p>
+            <img src="media/disp12.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+    <h5>Auto Mosaics</h5>
+        <p>Finally, we can combine all the previous parts to automatically create mosaics from two input images. Below are some results of this process.</p>
+                <img src="media/disp13.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
 </body>
 </html>
