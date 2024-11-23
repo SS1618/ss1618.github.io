@@ -69,16 +69,17 @@
     .math-container {
       max-width: 800px;
       margin: 20px auto;
-      background-color: #fff;
       padding: 15px;
+      background-color: #f9f9f9;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-    .math-container math {
+      text-align: left;
+      font-size: 1.2em; /* Increased font size for better readability */
+  }
+  math {
       display: block;
-      margin: auto;
-    }
+      margin: 10px auto;
+  }
   </style>
 </head>
 <body>  
@@ -120,67 +121,66 @@
   <p>
     To understand how diffusion models work, I will replicate the process by which these models noise images to generate training data. The noisy image for timestep <em>t</em> is generated as follows:
   </p>
-
-  <div class="math-container">
+    <div class="math-container">
     <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-      <mtable displaystyle="true">
-        <mlabeledtr>
-          <mtd id="mjx-eqn:A.2">
-            <mtext>(A.2)</mtext>
-          </mtd>
-          <mtd>
-            <msub>
-              <mi>x</mi>
-              <mi>t</mi>
-            </msub>
-            <mo>=</mo>
-            <msqrt>
-              <msub>
-                <mrow>
-                  <mover>
-                    <mi>&alpha;</mi>
-                    <mo stretchy="false">&#xAF;</mo>
-                  </mover>
-                </mrow>
-                <mi>t</mi>
-              </msub>
-            </msqrt>
-            <msub>
-              <mi>x</mi>
-              <mn>0</mn>
-            </msub>
-            <mo>+</mo>
-            <msqrt>
-              <mn>1</mn>
-              <mo>&minus;</mo>
-              <msub>
-                <mrow>
-                  <mover>
-                    <mi>&alpha;</mi>
-                    <mo stretchy="false">&#xAF;</mo>
-                  </mover>
-                </mrow>
-                <mi>t</mi>
-              </msub>
-            </msqrt>
-            <mi>&epsilon;</mi>
-            <mstyle scriptlevel="0">
-              <mspace width="1em"></mspace>
-            </mstyle>
-            <mtext>where</mtext>
-            <mi>&epsilon;</mi>
-            <mo>&sim;</mo>
-            <mi>N</mi>
-            <mo>(</mo>
-            <mn>0</mn>
-            <mo>,</mo>
-            <mn>1</mn>
-            <mo>)</mo>
-          </mtd>
-        </mlabeledtr>
-      </mtable>
+        <mtable displaystyle="true" style="border-spacing: 10px;">
+            <mlabeledtr>
+                <mtd id="mjx-eqn:A.2" style="padding-right: 10px; text-align: right;">
+                    <mtext>(A.2)</mtext>
+                </mtd>
+                <mtd>
+                    <msub>
+                        <mi>x</mi>
+                        <mi>t</mi>
+                    </msub>
+                    <mo>=</mo>
+                    <msqrt>
+                        <msub>
+                            <mrow>
+                                <mover>
+                                    <mi>&alpha;</mi>
+                                    <mo stretchy="false">&#xAF;</mo>
+                                </mover>
+                            </mrow>
+                            <mi>t</mi>
+                        </msub>
+                    </msqrt>
+                    <msub>
+                        <mi>x</mi>
+                        <mn>0</mn>
+                    </msub>
+                    <mo>+</mo>
+                    <msqrt>
+                        <mn>1</mn>
+                        <mo>&minus;</mo>
+                        <msub>
+                            <mrow>
+                                <mover>
+                                    <mi>&alpha;</mi>
+                                    <mo stretchy="false">&#xAF;</mo>
+                                </mover>
+                            </mrow>
+                            <mi>t</mi>
+                        </msub>
+                    </msqrt>
+                    <mi>&epsilon;</mi>
+                    <mstyle scriptlevel="0">
+                        <mspace width="1em"></mspace>
+                    </mstyle>
+                    <mtext>where</mtext>
+                    <mi>&epsilon;</mi>
+                    <mo>&sim;</mo>
+                    <mi>N</mi>
+                    <mo>(</mo>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mn>1</mn>
+                    <mo>)</mo>
+                </mtd>
+            </mlabeledtr>
+        </mtable>
     </math>
-  </div>
+    </div>
 
 <p>Where the alpha bar term is a constant that comes from a scheduler that dictates how much noise gets added at each timestep. Below is an example of this noising process going from a normal image to images noised at t = 250, 500, and 750.
 </p>
