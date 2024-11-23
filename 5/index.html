@@ -52,6 +52,66 @@
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
+             .image-container03 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-template-rows: repeat(1, auto); /* 2 rows */
+    gap: 10px; /* Spacing between items */
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container03 img {
+    width: 100%; /* Full width of the grid cell */
+    height: auto; /* Maintain aspect ratio */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .image-container04 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 3 columns */
+    grid-template-rows: repeat(1, auto); /* 2 rows */
+    gap: 10px; /* Spacing between items */
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container04 img {
+    width: 100%; /* Full width of the grid cell */
+    height: auto; /* Maintain aspect ratio */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+ .image-container05 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 3 columns */
+    grid-template-rows: repeat(1, auto); /* 2 rows */
+    gap: 10px; /* Spacing between items */
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container05 img {
+    width: 100%; /* Full width of the grid cell */
+    height: auto; /* Maintain aspect ratio */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .image-container06 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 3 columns */
+    grid-template-rows: repeat(1, auto); /* 2 rows */
+    gap: 10px; /* Spacing between items */
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container06 img {
+    width: 100%; /* Full width of the grid cell */
+    height: auto; /* Maintain aspect ratio */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
         .image-container2 {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
@@ -238,7 +298,7 @@
 <p>Where the alpha bar term is a constant that comes from a scheduler that dictates how much noise gets added at each timestep. Below is an example of this noising process going from a normal image to images noised at t = 250, 500, and 750.
 </p>
   
-  <div class="image-container">
+  <div class="image-container04">
   <img src="media/fig13.png">
   <img src="media/fig14.png">
   <img src="media/fig15.png">
@@ -389,7 +449,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 <p>Here is the results of this process, with each fifth step visualized.
 </p>
   
-<div class="image-container">
+<div class="image-container05">
 
   <img src="media/fig29.png"  >
   <img src="media/fig30.png"  >
@@ -401,7 +461,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 <p>Now here is a comparison of the iterative denoising versus the one-step denoising versus the Gaussian blurring.
 </p>
   
-<div class="image-container">
+<div class="image-container03">
   <img src="media/fig34.png"  >
   <img src="media/fig35.png"  >
   <img src="media/fig36.png"  >
@@ -410,7 +470,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 <p>The iterative model can also generate images from scratch given pure noise and starting at the t = 990. Here are some results of this.
 </p>
   
-<div class="image-container">
+<div class="image-container05">
   <img src="media/fig37.png"  >
   <img src="media/fig38.png"  >
   <img src="media/fig39.png"  >
@@ -420,7 +480,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 <p>Personally, I like these abstract and unclear images, but if we want images that make more sense we can use classifier-free guidance. This is a technique we can use to push our image more towards what our prompt dictates. We do so by generating two noise estimates, one given no text prompt and another with our prompt. We then scale the difference in these two noises and add it to our no-text-prompt noise. This essentially exaggerates the impact of our text prompt on the  predicted noise by moving further in a direction purely dictated by the text prompt. Using a scale of 7, we get the following results:
 </p>
   
-<div class="image-container">
+<div class="image-container05">
   <img src="media/fig47.png"  >
   <img src="media/fig48.png"  >
   <img src="media/fig49.png"  >
@@ -430,7 +490,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 <p>The diffusion model also allows us edit our images. One such editing method is to add noise to an image and pass it through the model. This will result in the model filling in certain details that are obscured by the noise. Doing so with image of the Campanile at varying noise levels (i_start = 1,3,5,7,10,20 yields the following results:
 </p>
   
-<div class="image-container">
+<div class="image-container06">
   <img src="media/fig52.png"  >
   <img src="media/fig53.png"  >
   <img src="media/fig54.png"  >
@@ -447,7 +507,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 
 <p>Edits</p>
 
-      <div class="image-container">
+      <div class="image-container06">
   <img src="media/fig59.png"  >
   <img src="media/fig60.png"  >
   <img src="media/fig61.png"  >
@@ -462,7 +522,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 
 <p>Edits</p>
 
-      <div class="image-container">
+      <div class="image-container06">
   <img src="media/fig66.png"  >
   <img src="media/fig67.png"  >
   <img src="media/fig68.png"  >
@@ -478,7 +538,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 </div>
 <p>Edits</p>
 
-      <div class="image-container">
+      <div class="image-container06">
   <img src="media/fig73.png"  >
   <img src="media/fig74.png"  >
   <img src="media/fig75.png"  >
@@ -493,7 +553,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 
 <p>Edits</p>
 
-      <div class="image-container">
+      <div class="image-container06">
   <img src="media/fig80.png"  >
   <img src="media/fig81.png"  >
   <img src="media/fig82.png"  >
@@ -507,7 +567,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
   <img src="media/fig86.png"  ></div>
 
 <p>Edits</p>
-<div class="image-container">
+<div class="image-container06">
   <img src="media/fig87.png"  >
   <img src="media/fig88.png"  >
   <img src="media/fig89.png"  >
@@ -573,7 +633,7 @@ The above results are based on the input noise, prompt, and timestep, but the di
 <p>One last thing we will explore is making hybrid images with diffusion. Normally, this process is quite involved but diffusion makes it easier. We simply run two noise estimates generated from different prompts through low pass and high pass filters and add them together. Here are the results.
 </p>
   
-<div class="image-container">
+<div class="image-container03">
   <img src="media/fig129.png"  >
   <img src="media/fig130.png"  >
   <img src="media/fig131.png"  ></div>
