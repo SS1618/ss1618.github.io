@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Project 5</title>
-    <style>
+    <!--<style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -18,109 +18,154 @@
           clear: both;
           display: table;
         }
-    </style>
+    </style>//-->
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+    p {
+      max-width: 800px;
+      margin: 20px auto;
+      color: #555;
+      text-align: justify;
+    }
+    .image-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .image-container img {
+      max-width: 45%;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .math-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .math-container math {
+      display: block;
+      margin: auto;
+    }
+  </style>
 </head>
-<body>
-<img src="media/fig1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  
-    <h1>Diffusion</h1>
-        <h2>By: Saurav Suresh</h2>
+<body>  
+ <h1>Diffusion</h1>
+  <h2>By: Saurav Suresh</h2>
 
-<h2>Part A:</h2>
+  <h2>Part A:</h2>
 
-<h3>Setup</h3>
+  <h3>Setup</h3>
+  <p>
+    To gain access to the DeepFloyd IF diffusion model, I had to create a Hugging Face account and get an access token for the model. Below are images generated using preloaded text prompts and the DeepFloyd IF model.
+  </p>
 
-<p>To gain access to the DeepFloyd IF diffusion model, I had to create a Hugging Face account and get an access token for the model. Below are images generated using preloaded text prompts and the DeepFloyd IF model.
-</p>
-  
-[fig 1-6]
-  <img src="media/fig1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig2.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig3.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig4.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig5.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig6.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <div class="image-container">
+    <img src="media/fig1.png" alt="Figure 1">
+    <img src="media/fig2.png" alt="Figure 2">
+    <img src="media/fig3.png" alt="Figure 3">
+    <img src="media/fig4.png" alt="Figure 4">
+    <img src="media/fig5.png" alt="Figure 5">
+    <img src="media/fig6.png" alt="Figure 6">
+  </div>
 
-<p>The first row of images are the output of stage 1 of the model and the second row is the output of stage 2 of the model given the output of stage 1. These images are generated with 20 inference steps. If we make this number 50, we get the following results.
-</p>
-  
-[fig 7-12]
-  <img src="media/fig7.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig8.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig9.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig10.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig11.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
-  <img src="media/fig12.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <p>
+    The first row of images is the output of stage 1 of the model, and the second row is the output of stage 2 of the model, given the output of stage 1. These images are generated with 20 inference steps. If we make this number 50, we get the following results.
+  </p>
 
-<p>Note I am using a seed = 100 for this project.
-</p>
+  <div class="image-container">
+    <img src="media/fig7.png" alt="Figure 7">
+    <img src="media/fig8.png" alt="Figure 8">
+    <img src="media/fig9.png" alt="Figure 9">
+    <img src="media/fig10.png" alt="Figure 10">
+    <img src="media/fig11.png" alt="Figure 11">
+    <img src="media/fig12.png" alt="Figure 12">
+  </div>
 
-<h3>Sampling Loops</h3>
+  <p>Note: I am using a seed value of 100 for this project.</p>
 
-<p>To understand how diffusion models work, I will be replicating the way these models noise images in order to generate training data. The noisy image for timestep t is generated as follows:
-</p>
+  <h3>Sampling Loops</h3>
+  <p>
+    To understand how diffusion models work, I will replicate the process by which these models noise images to generate training data. The noisy image for timestep <em>t</em> is generated as follows:
+  </p>
 
-
-[A.2]
-  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-  <mtable displaystyle="true">
-    <mlabeledtr>
-      <mtd id="mjx-eqn:A.2">
-        <mtext>(A.2)</mtext>
-      </mtd>
-      <mtd>
-        <msub>
-          <mi>x</mi>
-          <mi>t</mi>
-        </msub>
-        <mo>=</mo>
-        <msqrt>
-          <msub>
-            <mrow data-mjx-texclass="ORD">
-              <mover>
-                <mi>&#x3B1;</mi>
-                <mo stretchy="false">&#xAF;</mo>
-              </mover>
-            </mrow>
-            <mi>t</mi>
-          </msub>
-        </msqrt>
-        <msub>
-          <mi>x</mi>
-          <mn>0</mn>
-        </msub>
-        <mo>+</mo>
-        <msqrt>
-          <mn>1</mn>
-          <mo>&#x2212;</mo>
-          <msub>
-            <mrow data-mjx-texclass="ORD">
-              <mover>
-                <mi>&#x3B1;</mi>
-                <mo stretchy="false">&#xAF;</mo>
-              </mover>
-            </mrow>
-            <mi>t</mi>
-          </msub>
-        </msqrt>
-        <mi>&#x3F5;</mi>
-        <mstyle scriptlevel="0">
-          <mspace width="1em"></mspace>
-        </mstyle>
-        <mtext>where</mtext>
-        <mtext>&#xA0;</mtext>
-        <mi>&#x3F5;</mi>
-        <mo>&#x223C;</mo>
-        <mi>N</mi>
-        <mo stretchy="false">(</mo>
-        <mn>0</mn>
-        <mo>,</mo>
-        <mn>1</mn>
-        <mo stretchy="false">)</mo>
-      </mtd>
-    </mlabeledtr>
-  </mtable>
-</math>
+  <div class="math-container">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mtable displaystyle="true">
+        <mlabeledtr>
+          <mtd id="mjx-eqn:A.2">
+            <mtext>(A.2)</mtext>
+          </mtd>
+          <mtd>
+            <msub>
+              <mi>x</mi>
+              <mi>t</mi>
+            </msub>
+            <mo>=</mo>
+            <msqrt>
+              <msub>
+                <mrow>
+                  <mover>
+                    <mi>&alpha;</mi>
+                    <mo stretchy="false">&#xAF;</mo>
+                  </mover>
+                </mrow>
+                <mi>t</mi>
+              </msub>
+            </msqrt>
+            <msub>
+              <mi>x</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>+</mo>
+            <msqrt>
+              <mn>1</mn>
+              <mo>&minus;</mo>
+              <msub>
+                <mrow>
+                  <mover>
+                    <mi>&alpha;</mi>
+                    <mo stretchy="false">&#xAF;</mo>
+                  </mover>
+                </mrow>
+                <mi>t</mi>
+              </msub>
+            </msqrt>
+            <mi>&epsilon;</mi>
+            <mstyle scriptlevel="0">
+              <mspace width="1em"></mspace>
+            </mstyle>
+            <mtext>where</mtext>
+            <mi>&epsilon;</mi>
+            <mo>&sim;</mo>
+            <mi>N</mi>
+            <mo>(</mo>
+            <mn>0</mn>
+            <mo>,</mo>
+            <mn>1</mn>
+            <mo>)</mo>
+          </mtd>
+        </mlabeledtr>
+      </mtable>
+    </math>
+  </div>
 
 <p>Where the alpha bar term is a constant that comes from a scheduler that dictates how much noise gets added at each timestep. Below is an example of this noising process going from a normal image to images noised at t = 250, 500, and 750.
 </p>
