@@ -1,1 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .column {
+          float: left;
+          width: 33.33%;
+          padding: 5px;
+        }
 
+        .row::after {
+          content: "";
+          clear: both;
+          display: table;
+        }
+    </style>
+</head>
+<body>
+<img src="media/fig1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  
+    <h1>Diffusion</h1>
+        <h2>By: Saurav Suresh</h2>
+
+<h2>Part A:</h2>
+
+<h3>Setup</h3>
+
+<p>To gain access to the DeepFloyd IF diffusion model, I had to create a Hugging Face account and get an access token for the model. Below are images generated using preloaded text prompts and the DeepFloyd IF model.
+</p>
+  
+[fig 1-6]
+  <img src="media/fig1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig2.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig3.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig4.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig5.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig6.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>The first row of images are the output of stage 1 of the model and the second row is the output of stage 2 of the model given the output of stage 1. These images are generated with 20 inference steps. If we make this number 50, we get the following results.
+</p>
+  
+[fig 7-12]
+  <img src="media/fig7.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig8.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig9.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig10.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig11.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig12.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Note I am using a seed = 100 for this project.
+</p>
+
+<h3>Sampling Loops</h3>
+
+<p>To understand how diffusion models work, I will be replicating the way these models noise images in order to generate training data. The noisy image for timestep t is generated as follows:
+</p>
+
+
+[A.2]
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable displaystyle="true">
+    <mlabeledtr>
+      <mtd id="mjx-eqn:A.2">
+        <mtext>(A.2)</mtext>
+      </mtd>
+      <mtd>
+        <msub>
+          <mi>x</mi>
+          <mi>t</mi>
+        </msub>
+        <mo>=</mo>
+        <msqrt>
+          <msub>
+            <mrow data-mjx-texclass="ORD">
+              <mover>
+                <mi>&#x3B1;</mi>
+                <mo stretchy="false">&#xAF;</mo>
+              </mover>
+            </mrow>
+            <mi>t</mi>
+          </msub>
+        </msqrt>
+        <msub>
+          <mi>x</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>+</mo>
+        <msqrt>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <msub>
+            <mrow data-mjx-texclass="ORD">
+              <mover>
+                <mi>&#x3B1;</mi>
+                <mo stretchy="false">&#xAF;</mo>
+              </mover>
+            </mrow>
+            <mi>t</mi>
+          </msub>
+        </msqrt>
+        <mi>&#x3F5;</mi>
+        <mstyle scriptlevel="0">
+          <mspace width="1em"></mspace>
+        </mstyle>
+        <mtext>where</mtext>
+        <mtext>&#xA0;</mtext>
+        <mi>&#x3F5;</mi>
+        <mo>&#x223C;</mo>
+        <mi>N</mi>
+        <mo stretchy="false">(</mo>
+        <mn>0</mn>
+        <mo>,</mo>
+        <mn>1</mn>
+        <mo stretchy="false">)</mo>
+      </mtd>
+    </mlabeledtr>
+  </mtable>
+</math>
+
+<p>Where the alpha bar term is a constant that comes from a scheduler that dictates how much noise gets added at each timestep. Below is an example of this noising process going from a normal image to images noised at t = 250, 500, and 750.
+</p>
+  
+[fig 13-16]
+  <img src="media/fig13.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig14.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig15.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig16.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>The diffusion model's iterative goal is to be able to denoise such images. To gain perspective on this problem, lets see how Gaussian denoising fairs. Below are the results with kernel sizes of 5, 15, and 21 respectively.
+</p>
+  
+[fig 17-22]
+  <img src="media/fig17.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig18.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig19.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig20.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig21.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig22.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Now let's see how the diffusion model fairs. We will use the diffusion model's stage 1 UNet and feed it the noised images along with a text prompt "a high quality photo". Below are the results:
+</p>
+  
+[fig 23-28]
+  <img src="media/fig23.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig24.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig25.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig26.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig27.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig28.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+The above results are based on the input noise, prompt, and timestep, but the diffusion model is meant to run iteratively. So instead of just running it once with one t, ideally we want to run it for all t from 1000 to 0, with each timestep improving on the last. Unfortunately, so many steps is expensive, so we need a way to skip over some of them. We do this with a sort of interpolation of the noise to approximate what our noisy image would be at some further off timestep. To do so, we first generate a list of timesteps we want to compute. Our list will go from 990 to 0 with a decrement of 30. Next we use the equation below to compute the denoised image at each step.
+
+[3]
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable displaystyle="true">
+    <mlabeledtr>
+      <mtd id="mjx-eqn:A.3">
+        <mtext>(A.3)</mtext>
+      </mtd>
+      <mtd>
+        <msub>
+          <mi>x</mi>
+          <mrow data-mjx-texclass="ORD">
+            <msup>
+              <mi>t</mi>
+              <mo data-mjx-alternate="1">&#x2032;</mo>
+            </msup>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <msqrt>
+              <msub>
+                <mrow data-mjx-texclass="ORD">
+                  <mover>
+                    <mi>&#x3B1;</mi>
+                    <mo stretchy="false">&#xAF;</mo>
+                  </mover>
+                </mrow>
+                <mrow data-mjx-texclass="ORD">
+                  <msup>
+                    <mi>t</mi>
+                    <mo data-mjx-alternate="1">&#x2032;</mo>
+                  </msup>
+                </mrow>
+              </msub>
+            </msqrt>
+            <msub>
+              <mi>&#x3B2;</mi>
+              <mi>t</mi>
+            </msub>
+          </mrow>
+          <mrow>
+            <mn>1</mn>
+            <mo>&#x2212;</mo>
+            <msub>
+              <mrow data-mjx-texclass="ORD">
+                <mover>
+                  <mi>&#x3B1;</mi>
+                  <mo stretchy="false">&#xAF;</mo>
+                </mover>
+              </mrow>
+              <mi>t</mi>
+            </msub>
+          </mrow>
+        </mfrac>
+        <msub>
+          <mi>x</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>+</mo>
+        <mfrac>
+          <mrow>
+            <msqrt>
+              <msub>
+                <mi>&#x3B1;</mi>
+                <mi>t</mi>
+              </msub>
+            </msqrt>
+            <mo stretchy="false">(</mo>
+            <mn>1</mn>
+            <mo>&#x2212;</mo>
+            <msub>
+              <mrow data-mjx-texclass="ORD">
+                <mover>
+                  <mi>&#x3B1;</mi>
+                  <mo stretchy="false">&#xAF;</mo>
+                </mover>
+              </mrow>
+              <mrow data-mjx-texclass="ORD">
+                <msup>
+                  <mi>t</mi>
+                  <mo data-mjx-alternate="1">&#x2032;</mo>
+                </msup>
+              </mrow>
+            </msub>
+            <mo stretchy="false">)</mo>
+          </mrow>
+          <mrow>
+            <mn>1</mn>
+            <mo>&#x2212;</mo>
+            <msub>
+              <mrow data-mjx-texclass="ORD">
+                <mover>
+                  <mi>&#x3B1;</mi>
+                  <mo stretchy="false">&#xAF;</mo>
+                </mover>
+              </mrow>
+              <mi>t</mi>
+            </msub>
+          </mrow>
+        </mfrac>
+        <msub>
+          <mi>x</mi>
+          <mi>t</mi>
+        </msub>
+        <mo>+</mo>
+        <msub>
+          <mi>v</mi>
+          <mi>&#x3C3;</mi>
+        </msub>
+      </mtd>
+    </mlabeledtr>
+  </mtable>
+</math>
+
+<p>Here is the results of this process, with each fifth step visualized.
+</p>
+  
+[fig 29 - 33]
+  <img src="media/fig29.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig30.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig31.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig32.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig33.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Now here is a comparison of the iterative denoising versus the one-step denoising versus the Gaussian blurring.
+</p>
+  
+[fig 34 - 36]
+  <img src="media/fig34.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig35.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig36.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>The iterative model can also generate images from scratch given pure noise and starting at the t = 990. Here are some results of this.
+</p>
+  
+[fig 37-41]
+  <img src="media/fig37.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig38.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig39.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig40.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig41.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Personally, I like these abstract and unclear images, but if we want images that make more sense we can use classifier-free guidance. This is a technique we can use to push our image more towards what our prompt dictates. We do so by generating two noise estimates, one given no text prompt and another with our prompt. We then scale the difference in these two noises and add it to our no-text-prompt noise. This essentially exaggerates the impact of our text prompt on the  predicted noise by moving further in a direction purely dictated by the text prompt. Using a scale of 7, we get the following results:
+</p>
+  
+[fig 47 - 51]
+  <img src="media/fig47.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig48.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig49.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig50.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig51.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>The diffusion model also allows us edit our images. One such editing method is to add noise to an image and pass it through the model. This will result in the model filling in certain details that are obscured by the noise. Doing so with image of the Campanile at varying noise levels (i_start = 1,3,5,7,10,20 yields the following results:
+</p>
+  
+[fig 52 - 57]
+  <img src="media/fig52.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig53.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig54.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig55.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig56.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig57.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Doing so with an image of a cat and a dog gives us these images:
+
+<p>Original
+</p>
+[fig 58]
+  <img src="media/fig1.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Edits</p>
+[fig 59 - 64]
+  <img src="media/fig59.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig60.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig61.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig62.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig63.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig64.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Original</p>
+[fig 65]
+  <img src="media/fig65.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Edits</p>
+[fig 66-71]
+  <img src="media/fig66.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig67.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig68.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig69.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig70.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig71.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Diffusion also lets us convert a hand-drawn image to something more realistic. Here are some results of this process:</p>
+
+<p>Original</p>
+[fig 72]
+  <img src="media/fig72.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Edits</p>
+[fig 73 - 78]
+  <img src="media/fig73.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig74.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig75.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig76.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig77.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig78.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Original</p>
+[fig 79]
+  <img src="media/fig79.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Edits</p>
+[fig 80 - 85]
+  <img src="media/fig80.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig81.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig82.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig83.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig84.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig85.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Original</p>
+[fig 86]
+  <img src="media/fig86.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Edits</p>
+[fig 87 - 92]
+  <img src="media/fig87.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig88.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig89.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig90.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig91.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig92.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>We can also replace sections of our image. If we generate a mask and only replace the content within the mask with the content generated by the diffusion model, we end up with an edited image where the masked region is a new fabricated piece of the image. Below are some examples:
+</p>
+  
+[fig 93 - 104]
+  <img src="media/fig93.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig94.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig95.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig96.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig97.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig98.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig99.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig100.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig101.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig102.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig103.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig104.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>We can do further image editing by using our noise editing technique from earlier but also using our prompt to influence what is filled into the noise. Here are some results where we use "a rocket ship" and "a pencil" to condition our edits.
+</p>
+  
+[fig 105 - 122]
+  <img src="media/fig105.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig106.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig107.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig108.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig109.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig110.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig111.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig112.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig113.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig114.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig115.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig116.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig117.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig118.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig119.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig120.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig121.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig122.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig123.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+
+<p>We can also create visual anagrams with diffusion models. We do so by generating two noise estimates, one for the noisy image and another for the flipped noisy image. We then flip the noisy estimate of the flipped noisy image and average the two noise estimates. This will yield an image that looks like two different things based on what prompt was given for each orientation. Below are some results
+</p>
+  
+[fig 123-128]
+  <img src="media/fig123.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig124.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig125.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig126.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig127.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig128.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>One last thing we will explore is making hybrid images with diffusion. Normally, this process is quite involved but diffusion makes it easier. We simply run two noise estimates generated from different prompts through low pass and high pass filters and add them together. Here are the results.
+</p>
+  
+[fig 129 - 131]
+  <img src="media/fig129.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig130.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+  <img src="media/fig131.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<h2>Part B</h2>
+
+<p>Now that we are acquainted with the diffusion model and its abilities, we will train our own diffusion model that can generate handwritten digits.
+</p>
+  
+<h3>Denoising UNet</h3>
+
+<p>First, we will train a denoising unet that can somewhat denoise a given noisy image of a digit. First, we need to generate a dataset of noisy images. We will noise MNIST images by simply adding gaussian noise scaled by some value. Below is a grid showing this noising processes. The values on the top indicate the constants by which the noise is scaled.
+</p>
+  
+[fig 132]
+  <img src="media/fig132.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Next, we construct a UNet with the following architecture:</p>
+
+[fig 139]
+  <img src="media/fig139.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Next we will train this model to denoise noisy images (scaled by 0.5). Training will occur with a batch size of 256 for 5 epochs. We will use MSE loss and Adam optimization with a lr=1e-4. Below is the training loss graph:
+</p>
+  
+[fig 140]
+  <img src="media/fig140.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>After the first epoch, our model is fairly good at denoising. Below are some results:
+</p>
+  
+[fig 133]
+  <img src="media/fig133.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Here is the model's performance after the last epoch.
+</p>
+  
+[fig 134]
+  <img src="media/fig134.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Now let's see how the model performs on images with varying noise levels.
+</p>
+  
+[fig 135]
+  <img src="media/fig135.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>It is evident that is performs poorly on images with more noise.
+</p>
+  
+
+<h3>Diffusion Model</h3>
+
+<p>The UNet from the previous section is lacking certain key attributes of the diffusion UNet. We need to add time and text inputs.
+</p>
+  
+<h3>DDPM</h3>
+
+<p>DDPM provides a way to train an iterative diffusion model according to some noise schedule. We can use the same equation from part A to generate noisy images for each timestep, except now we will generate the noise schedule ourselves. We do so by generating a set of evenly spaced beta values for each timestep and then generating alpha values which are simply 1 - beta_t and alpha bar values which are the cumulative products of the alpha values. Additionally, we want our UNet to take in the timestep, so we add in some fully-connected layers that can embed the timestep information and pass it into the model. Below is a diagram of the architecture:
+</p>
+  
+[fig 141]
+  <img src="media/fig141.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>We then generate a DDPM schedule for betas ranging from [0.0001, 0.02] and 300 timesteps. Using this schedule we train the above unet. For each training loop, we take an training image, noise it according to the schedule and a randomly selected timestep, and then optimize the loss between the model's noise prediction and the actual noise we added. Below is the training loss curve for this model.
+</p>
+  
+[fig 142]
+  <img src="media/fig142.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>We can also see the model's performance after epoch 5 with the following samples:
+</p>
+  
+[fig 136]
+  <img src="media/fig136.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>After the last epoch, we get the following results:
+</p>
+  
+[fig 137]
+  <img src="media/fig137.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>Note that these samples are generated by passing a pure noise image to the model and performing iterative diffusion as we did in part A.
+</p>
+  
+<h3>Class Conditioning</h3>
+
+<p>Now that we've added time conditioning, lets also add class conditioning which will stand in for text prompting. This will allow us to generate specific digits with our model. We incorporate class conditioning by creating one-hot key vectors for each digit and passing these vectors into our model. We then train similarly to the previous part except now we also pass in the image labels to our model. Below is the training loss curve plot for the training process.
+</p>
+  
+[fig 144]
+  <img src="media/fig144.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>At epoch 0, here are some sample results with each row ranging from 0-9:
+</p>
+  
+[fig 143]
+  <img src="media/fig143.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+<p>After the last epoch, we get the following results:
+</p>
+  
+[fig 138]
+  <img src="media/fig138.png" style="display:block;max-width: 100%;max-height: 100vh;margin: auto;">
+
+
+
+
+
+
+
+</body>
+</html>
