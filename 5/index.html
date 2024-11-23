@@ -67,24 +67,31 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
     .math-container {
-      max-width: 800px;
+      max-width: 1000px; /* Allow the math block to occupy more space */
       margin: 20px auto;
-      padding: 15px;
+      padding: 20px;
       background-color: #f9f9f9;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      text-align: left;
-      font-size: 1.2em; /* Increased font size for better readability */
+      text-align: center;
   }
   math {
       display: block;
-      margin: 10px auto;
+      margin: 0 auto;
+      text-align: center; /* Center the math content */
+  }
+  mtable {
+      margin: 0 auto;
+      width: 100%;
+  }
+  mtd {
+      vertical-align: middle;
   }
   </style>
 </head>
 <body>  
  <h1>Diffusion</h1>
-  <h2>By: Saurav Suresh</h2>
+  <h2>By: Saurav uresh</h2>
 
   <h2>Part A:</h2>
 
@@ -122,13 +129,13 @@
     To understand how diffusion models work, I will replicate the process by which these models noise images to generate training data. The noisy image for timestep <em>t</em> is generated as follows:
   </p>
     <div class="math-container">
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-        <mtable displaystyle="true" style="border-spacing: 10px;">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" style="width: 100%;">
+        <mtable displaystyle="true" style="margin: 0 auto; border-spacing: 10px; width: 100%;">
             <mlabeledtr>
-                <mtd id="mjx-eqn:A.2" style="padding-right: 10px; text-align: right;">
+                <mtd id="mjx-eqn:A.2" style="padding-right: 10px; text-align: right; width: 10%;">
                     <mtext>(A.2)</mtext>
                 </mtd>
-                <mtd>
+                <mtd style="text-align: center; width: 90%;">
                     <msub>
                         <mi>x</mi>
                         <mi>t</mi>
@@ -180,7 +187,7 @@
             </mlabeledtr>
         </mtable>
     </math>
-    </div>
+</div>
 
 <p>Where the alpha bar term is a constant that comes from a scheduler that dictates how much noise gets added at each timestep. Below is an example of this noising process going from a normal image to images noised at t = 250, 500, and 750.
 </p>
