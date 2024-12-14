@@ -267,7 +267,7 @@ To go from pixel to rays, I simply used the translation component of the extrins
 
   <h3>Training</h3>
 
-  <p>I trained my NeRF model for 5000 iterations with a Adam optimizer with learning rate 5e-4. Below is a visual for the progression of the model that shows the rendering of 6 validation views.</p>
+  <p>I trained my NeRF model for 3000 iterations with a Adam optimizer with learning rate 5e-4. Below is a visual for the progression of the model that shows the rendering of 6 validation views.</p>
 
   
 
@@ -291,7 +291,7 @@ To go from pixel to rays, I simply used the translation component of the extrins
         <img src="media/fig25.gif"  ></div>
 
   <h2>Background Color</h2>
-  <p>We can make a slight modification to the volume rendering function to change the background color of our rendered images. If we simply check when the rendered color is close to 0 and change it to a color of our choice, the rendered image will have a different background color. Below is an example:
+  <p>We can make a slight modification to the volume rendering function to change the background color of our rendered images. If we sum over our sigma values, we can get the density for a spot in the image. We then set any areas that have a close to zero density to our background color.
   </p>
 
    <div class="image-container">
