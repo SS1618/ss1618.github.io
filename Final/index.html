@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neural Radiance Fields</title>
+    
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+    p {
+      max-width: 800px;
+      margin: 20px auto;
+      color: #555;
+      text-align: justify;
+    }
+    .image-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(1, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .image-container03 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(1, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container03 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .image-container04 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: repeat(1, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container04 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+ .image-container05 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    grid-template-rows: repeat(1, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container05 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .image-container06 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    grid-template-rows: repeat(1, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container06 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .image-container2 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(2, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container2 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .image-container3 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-template-rows: repeat(3, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container3 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+.image-container4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: repeat(3, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container4 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+        .image-container5 {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    grid-template-rows: repeat(3, auto); 
+    gap: 10px; 
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .image-container5 img {
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+    .math-container {
+      max-width: 1000px; 
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+  }
+  math {
+      display: block;
+      margin: 0 auto;
+      text-align: center; 
+  }
+  mtable {
+      margin: 0 auto;
+      width: 100%;
+  }
+  mtd {
+      vertical-align: middle;
+  }
+  </style>
+</head>
+<body>  
+ <h1>Neural Radiance Fields
+</h1>
+  <h2>By: Saurav Suresh</h2>
+
+  <h2>2D NeRF:</h2>
+  <p>
+    As a primer, I first implemented a 2 dimensional NeRF. In other words, I made a model that can take a pixel coordinate and tell me what the RGB value is for that pixel. I did this for the image below.
+  </p>
+
+  <div class="image-container">
+    <img src="media/fig1.png" alt="Figure 1">
+  </div>
+
+  <p>
+    The model architecture is as shown below along with a sinusoidal positional encoder with frequency level = 10.
+  </p>
+
+  <div class="image-container">
+    <img src="media/fig2.png" alt="Figure 2">
+  </div>
+
+  <p>During training, for each training loop, I sample 10000 random pixels from the input image and feed this into the model. I did this for 3000 iterations, which yielded the following results.
+</p>
+  <div class="image-container">
+    <img src="media/fig3.png" alt="Figure 3">
+    <img src="media/fig4.png" alt="Figure 4">
+    <img src="media/fig5.png" alt="Figure 5">
+    <img src="media/fig6.png" alt="Figure 6">
+    <img src="media/fig7.png" alt="Figure 7">
+    <img src="media/fig8.png" alt="Figure 8">
+  </div>
+
+<p>Finally, this model produces this recreation of the input image.
+</p>
+  
+  <div class="image-container">
+  <img src="media/fig9.png">
+  </div>
+    
+<p>I repeated this process for a different image, yielding the following results:
+</p>
+  
+<div class="image-container">
+  <img src="media/fig10.png"  >
+  <img src="media/fig11.png"  >
+  <img src="media/fig12.png"  >
+  <img src="media/fig13.png"  >
+  <img src="media/fig14.png"  >
+  <img src="media/fig15.png"  >
+</div>
+
+<p>Finally, we get the following result (left is input and right is recreation):
+</p>
+  
+<div class="image-container2">
+  <img src="media/fig16.png"  >
+  <img src="media/fig17.png"  >
+</div>
+
+  <h2>3D NeRF</h2>
+
+  <p>NeRF essentially works by training a model to tell us what the RGB+density values are for a given view of the scene. Our dataset in this case will be a collection of images of the same object from varying perspectives. To train the NeRF, we randomly sample pixels across these images, calculate the rays for these pixels, and then feed the model these rays along with randomly sampled points along this ray. We then take the RGB+density values the model spits out and use them to compute the color for the pixel associated with each ray, and then compare this with the pixel we originally sampled. Through this process, we can generate views from arbitrary points using the model once it is trained.
+  <br>
+    <br>
+    To follow the above procedure, we need to both compute rays given a pixel and sample along these rays.
+  </p>
+
+<h3>Pixel to Ray:
+</h3>
+
+<p>
+To go from pixel to rays, I simply used the translation component of the extrinsic matrix to get the origin ray and then I subtracted this from the pixel coordinate transformed to a world coordinate.
+</p>
+  
+<h3>Sampling:
+</h3>
+
+<p>My sampling procedure was very straightforward. If perturbations are not wanted, I sample at a regular interval along the ray. Otherwise, I still sample at the regular interval, but then I add a small amount of noise to the samples.
+</p>
+
+  <h3>Volume Rendering:</h3>
+
+  <p>In order to generate the pixel value for a given view, we need to aggregate over the points we sampled along our rays and add up the colors based on each point's contribution. This is determined via a factor term that represents the probability of the ray terminating exactly at a given point. This equation is known as the volume rendering equation and is how I will take the model's output and get pixel values.
+</p>
+
+  <h3>Training</h3>
+
+  <p>I trained my NeRF model for 5000 iterations with a Adam optimizer with learning rate 5e-4. Below is a visual for the progression of the model that shows the rendering of 6 validation views.</p>
+
+  
+
+      <div class="image-container">
+        <img src="media/fig18.png"  >
+        <img src="media/fig19.png"  >
+        <img src="media/fig20.png"  >
+        <img src="media/fig21.png"  >
+        <img src="media/fig22.png"  >
+        <img src="media/fig23.png"  >
+      </div>
+<p>Here is a plot of the training PSNR.
+</p>
+<div class="image-container">
+        <img src="media/fig24.png"  ></div>
+
+<p>Here is a rendering done on test views.
+</p>
+
+  <div class="image-container">
+        <img src="media/fig25.gif"  ></div>
+
+  <h2>Background Color</h2>
+  <p>We can make a slight modification to the volume rendering function to change the background color of our rendered images. If we simply check when the rendered color is close to 0 and change it to a color of our choice, the rendered image will have a different background color. Below is an example:
+  </p>
+
+   <div class="image-container">
+        <img src="media/fig26.png"  ></div>
+
+</body>
+</html>
