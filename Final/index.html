@@ -291,7 +291,7 @@ To go from pixel to rays, I simply used the translation component of the extrins
         <img src="media/fig25.gif"  ></div>
 
   <h2>Background Color</h2>
-  <p>We can make a slight modification to the volume rendering function to change the background color of our rendered images. If we sum over our sigma values, we can get the density for a spot in the image. We then set any areas that have a close to zero density to our background color.
+  <p>We can make a slight modification to the volume rendering function to change the background color of our rendered images. If we compute a T_{n+1}, which is basically the exponential of the negative of the sum over all density values multiplied with step size, we get the probability of the ray not terminating for any of the samples. This means we are on a background pixel. So we multiply this probability with our background color and add this to our final color output.
   </p>
 
    <div class="image-container">
