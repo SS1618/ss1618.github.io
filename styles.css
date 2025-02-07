@@ -17,26 +17,29 @@ body {
 }
 
 .project-card {
-    background: white;
+    background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 10px;
     padding: 20px;
     width: calc(33% - 40px);
-    transition: transform 0.2s;
+    text-decoration: none;
+    color: black;
+    transition: transform 0.2s, background-color 0.2s;
 }
 
 .project-card:hover {
     transform: scale(1.05);
+    background-color: #e0e0e0;
+}
+
+.project-card img {
+    width: 100%;
+    border-radius: 8px;
 }
 
 .project-card h2 {
     margin: 10px 0;
-}
-
-.project-card a {
-    text-decoration: none;
-    color: #007bff;
 }
 
 @media (max-width: 768px) {
